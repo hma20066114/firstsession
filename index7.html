@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Testing f7 Function with Inputs</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f9fc;
+    color: #222;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  h1 {
+    color: #007acc;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 6px;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 10px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+  }
+  button {
+    margin-top: 20px;
+    background-color: #007acc;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #005f99;
+  }
+  #result {
+    margin-top: 24px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #004a87;
+    white-space: pre-wrap;
+  }
+  .error {
+    color: red;
+    margin-top: 12px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <h1>Test f7 Function with JSON Input</h1>
+  <p>Enter JSON objects representing the basket and prices <br>(e.g. {"apple":4,"banana":2} for basket; {"apple":0.5,"banana":0.75} for prices)</p>
+  
+  <label for="basketInput">Basket (product: quantity):</label>
+  <textarea id="basketInput">{"apple": 4, "banana": 2, "orange": 3}</textarea>
+  
+  <label for="pricesInput">Prices (product: price):</label>
+  <textarea id="pricesInput">{"apple": 0.5, "banana": 0.75, "orange": 0.6}</textarea>
+  
+  <button onclick="calculateCost()">Calculate Total Cost</button>
+  
+  <div id="result"></div>
+  <div id="error" class="error"></div>
+  
+  <script>
+    function f7(basket, prices) {
+      let total = 0;
+      for (const product in basket) {
+        if (basket.hasOwnProperty(product)) {
+          total += basket[product] * (prices[product] || 0);
+        }
+      }
+      return total;
+    }
+    
+    function calculateCost() {
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = '';
+      resultDiv.textContent = '';
+      
+      let basket, prices;
+      try {
+        basket = JSON.parse(document.getElementById('basketInput').value);
+      } catch(e) {
+        errorDiv.textContent = 'Invalid JSON in Basket input.';
+        return;
+      }
+      try {
+        prices = JSON.parse(document.getElementById('pricesInput').value);
+      } catch(e) {
+        errorDiv.textContent = 'Invalid JSON in Prices input.';
+        return;
+      }
+      if (typeof basket !== 'object' || basket === null) {
+        errorDiv.textContent = 'Basket must be a JSON object.';
+        return;
+      }
+      if (typeof prices !== 'object' || prices === null) {
+        errorDiv.textContent = 'Prices must be a JSON object.';
+        return;
+      }
+      
+      const cost = f7(basket, prices);
+      console.log('Total cost:', cost);
+      resultDiv.textContent = `Total cost of basket: $${cost.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>

@@ -12,12 +12,93 @@
                     // alert(parstInt(i)++);
                     
                 }
-
     </script>
+
+    <script>
+        function doIt() {
+            let sum = 0;
+            for (let i = 0; i < 1000; i++) {
+                if (i % 3 === 0 || i % 5 === 0) {
+                    sum += i;
+                }
+            }
+            alert("The sum of all the multiples of 3 or 5 below 1000 is: " + sum);
+        }
+    </script>
+
+    <script>
+    function f7(basket, prices) {
+      let total = 0;
+      for (const product in basket) {
+        if (basket.hasOwnProperty(product)) {
+          total += basket[product] * (prices[product] || 0);
+        }
+      }
+      return total;
+    }
+    
+    function calculateCost() {
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = '';
+      resultDiv.textContent = '';
+      
+      let basket, prices;
+      try {
+        basket = JSON.parse(document.getElementById('basketInput').value);
+      } catch(e) {
+        errorDiv.textContent = 'Invalid JSON in Basket input.';
+        return;
+      }
+      try {
+        prices = JSON.parse(document.getElementById('pricesInput').value);
+      } catch(e) {
+        errorDiv.textContent = 'Invalid JSON in Prices input.';
+        return;
+      }
+      if (typeof basket !== 'object' || basket === null) {
+        errorDiv.textContent = 'Basket must be a JSON object.';
+        return;
+      }
+      if (typeof prices !== 'object' || prices === null) {
+        errorDiv.textContent = 'Prices must be a JSON object.';
+        return;
+      }
+      
+      const cost = f7(basket, prices);
+      console.log('Total cost:', cost);
+      resultDiv.textContent = `Total cost of basket: $${cost.toFixed(2)}`;
+    }
+    </script>
+
+
+
+    
+
+
 </head>
 <body>
     <p>Hello World!</p>
     <input type="text" id="in">
     <button onclick='c()'>Press Me</button>
+
+    <p>The prompt: <button onclick="doIt()">Press me!</button></p>
+
+    <h1>Question-7</h1>
+
+    <div>
+        <label for="basketInput">Basket (product: quantity):</label>
+        <textarea id="basketInput">{"apple": 4, "banana": 2, "orange": 3}</textarea>
+  
+        <label for="pricesInput">Prices (product: price):</label>
+        <textarea id="pricesInput">{"apple": 0.5, "banana": 0.75, "orange": 0.6}</textarea>
+  
+        <button onclick="calculateCost()">Calculate Total Cost</button>
+    </div>
+
+    
+  
+    <div id="result"></div>
+    <div id="error" class="error"></div
 </body>
 </html>
